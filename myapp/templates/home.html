@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=na"
+    />
+    <title>My Personal Portfolio Website</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"
+      integrity="sha512-+2pW8xXU/rNr7VS+H62aqapfRpqFwnSQh9ap6THjsm41AxgA0MhFRtfrABS+Lx2KHJn82UOrnBKhjZOXpom2LQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <!-- <button onclick="toggleMode()">Dark/Light Mode</button> -->
+    <div id="home">
+      <div class="container">
+        <nav>
+          <img src="{% static 'img/logo.png' %}" alt="" class="logo" />
+          <ul id="sidemenu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#blog">Blogs</a></li>
+            <li><a href="#portfolio">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <i class="fa fa-times" aria-hidden="true" onclick="closemenu()"></i>
+          </ul>
+          <button id="theme-toggle" aria-label="Toggle light/dark mode">
+            🌙
+          </button>
+          <i class="fa fa-bars" aria-hidden="true" onclick="openmenu()"></i>
+        </nav>
+        <div class="header-text">
+          <p class="my-profession">I'm <span class="typing"></span></p>
+          <h1>
+            Hi, I'm <span>Elnur</span> Aliyev <br />
+            from Azerbaijan
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <div id="about">
+      <div class="container">
+        <div class="row">
+          <div class="about-col-1">
+            <h1 class="sub-title">About Me</h1>
+            <img src="{% static 'img/user.jpeg' %}" alt="Profile Picture" />
+          </div>
+          <div class="about-col-2">
+            <div class="p">
+              <p>
+                Hi! I'm Elnur Aliyev, a passionate software engineering student
+                with a focus on Python, Django, AI development, and
+                cybersecurity. As a 4th-year student at the State Custom
+                Committee Academy of the Republic of Azerbaijan, I am dedicated
+                to honing my skills in developing innovative web applications
+                and working on AI and machine learning solutions. I’m constantly
+                seeking new challenges to grow and make a meaningful impact in
+                the tech world.
+              </p>
+            </div>
+            <div class="tab-titles">
+              <div class="tab-links active-link" onclick="opentab('skills')">
+                Skills
+              </div>
+              <div class="tab-links" onclick="opentab('experience')">
+                Experience
+              </div>
+              <div class="tab-links" onclick="opentab('education')">
+                Education
+              </div>
+            </div>
+            <div class="tab-contents active-tab" id="skills">
+              <ul>
+                <li>
+                  <span>Python/Django</span><br />Building dynamic web
+                  applications and APIs.
+                </li>
+                <li>
+                  <span>Data Science</span><br />Analyzing and visualizing data
+                  to uncover insights.
+                </li>
+                <li>
+                  <span>AI Development</span><br />Creating and training models
+                  for machine learning and AI solutions.
+                </li>
+                <li>
+                  <span>Cybersecurity</span><br />Securing applications and
+                  systems from potential threats.
+                </li>
+              </ul>
+            </div>
+            <div class="tab-contents" id="experience">
+              <ul>
+                <li>
+                  <span>Software Engineer Intern</span><br />Developed web
+                  applications using Django and Python.
+                </li>
+                <li>
+                  <span>Data Analyst Intern</span><br />Worked on data cleaning,
+                  analysis, and visualization tasks.
+                </li>
+                <li>
+                  <span>AI Developer</span><br />Created machine learning models
+                  for various applications.
+                </li>
+              </ul>
+            </div>
+            <div class="tab-contents" id="education">
+              <ul>
+                <li>
+                  <span>Bachelor's in Information Security</span><br />State
+                  Custom Committee Academy of the Republic of Azerbaijan
+                  (Expected 2025).
+                </li>
+                <li>
+                  <span>Online Courses</span><br />Completed courses in Python,
+                  Django, Data Science, and AI on platforms like Coursera and
+                  Udemy.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+    <div id="blog">
+      <div class="container">
+        <h1 class="sub-title">My Blogs</h1>
+        <div class="blog-container">
+          {% for post in posts %}
+          <div class="blog-box">
+            <div class="blog-img">
+              <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+            </div>
+            <div class="blog-text">
+              <span>{{ post.category }}</span>
+              <h3 class="blog-title">{{ post.title }}</h3>
+              <p>{{ post.summary }}</p>
+              <a href="{% url 'blog_detail' post.slug %}">Read More</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a href="{% url 'blog_list' %}" class="btn">See more</a>
+      </div>
+    </div>
+
+    <div id="portfolio">
+      <div class="container">
+        <h1 class="sub-title">My Projects</h1>
+        <div class="work-list">
+          {% for project in projects %}
+          <div class="work">
+            <img src="{{ project.image.url }}" alt="{{ project.title }}" />
+            <div class="layer">
+              <h3>{{ project.title }}</h3>
+              <p>{{ project.description|truncatewords:20 }}</p>
+              <a href="{% url 'project_detail' slug=project.slug %}">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a href="{% url 'project_list' %}" class="btn">See more</a>
+      </div>
+    </div>
+
+    <div id="contact">
+      <div class="container">
+        <div class="row">
+          <div class="contact-left">
+            <h1 class="sub-title">Contact Me</h1>
+            <p><i class="fas fa-paper-plane"></i> elnuraliyev.mail@gmail.com</p>
+            <p><i class="fas fa-phone-square-alt"></i> +994505357771</p>
+            <div class="social-icons">
+              <a href="https://www.facebook.com/profile.php?id=100052307970129"><i class="fab fa-facebook"></i></a>
+              <a href="https://www.instagram.com/_al1yev07/"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/elnur-aliyev-a17160265/"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <a href="https://drive.google.com/uc?export=download&id=1s25tiK7kBgW0ic951p4wZfgHxSgvgns_" download class="btn btn2">Download CV</a>
+          </div>
+          <div class="contact-right">
+            <form method="post">
+              {% csrf_token %} {{ form.name }} {{ form.email }} {{ form.message}}
+              <button type="submit" class="btn btn2">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2024 Elnur Aliyev. All rights reserved.</p>
+      </div>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

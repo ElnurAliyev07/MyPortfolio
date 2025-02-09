@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}My Personal Portfolio Website{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div id="home">
+        <div class="container">
+            <nav>
+                <img src="{% static 'img/logo2.png' %}" alt="Logo" class="logo">
+                <ul id="sidemenu">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'home' %}#about">About</a></li>
+                    <li><a href="{% url 'blog_list' %}">Blogs</a></li>
+                    <li><a href="{% url 'project_list' %}">Projects</a></li>
+                    <li><a href="{% url 'home' %}#contact">Contact</a></li>
+                </ul>
+                <div class="menu-icons">
+                    <i class="fas fa-bars" id="menu-open"></i>
+                    <i class="fas fa-times" id="menu-close"></i>
+                </div>
+            </nav>
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <div class="copyright">
+        <p>&copy; 2024 Elnur Aliyev. All rights reserved.</p>
+    </div>
+
+    <script>
+        const sidemenu = document.getElementById("sidemenu");
+        const menuOpen = document.getElementById("menu-open");
+        const menuClose = document.getElementById("menu-close");
+
+        function toggleMenu() {
+            sidemenu.classList.toggle("active");
+            menuOpen.style.display = sidemenu.classList.contains("active") ? "none" : "block";
+            menuClose.style.display = sidemenu.classList.contains("active") ? "block" : "none";
+        }
+
+        menuOpen.addEventListener("click", toggleMenu);
+        menuClose.addEventListener("click", toggleMenu);
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInside = sidemenu.contains(event.target) ||
+                                menuOpen.contains(event.target) ||
+                                menuClose.contains(event.target);
+
+            if (!isClickInside && sidemenu.classList.contains("active")) {
+                toggleMenu();
+            }
+        });
+
+        // Reset menu state on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidemenu.classList.remove("active");
+                menuOpen.style.display = "none";
+                menuClose.style.display = "none";
+            } else {
+                menuOpen.style.display = sidemenu.classList.contains("active") ? "none" : "block";
+                menuClose.style.display = sidemenu.classList.contains("active") ? "block" : "none";
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

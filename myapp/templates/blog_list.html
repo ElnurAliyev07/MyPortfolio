@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bütün Blog Yazıları{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<div id="blog-list" class="bg-white text-black">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Bütün Blog Yazıları</h1>
+
+    <!-- Search form -->
+    <form method="get" action="{% url 'blog_list' %}" class="mb-8">
+      <input type="text" name="search" placeholder="Blog yazılarını axtar..."
+             class="w-full p-2 border border-gray-300 rounded-md"
+             value="{{ request.GET.search }}" aria-label="Search blog posts">
+      <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" aria-label="Submit search">
+        Axtar
+      </button>
+    </form>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for post in posts %}
+        <div class="bg-gray-100 rounded-lg overflow-hidden shadow-md">
+          <!-- Updated Image Tag for Lazy Loading -->
+      <img src="{% static 'img/placeholder.jpg' %}"
+     data-src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'img/default.jpg' %}{% endif %}"
+     alt="{{ post.title }}"
+     class="w-full h-48 object-cover lazy-load"
+     loading="lazy" />
+
+          <div class="p-6">
+            <span class="text-blue-500 text-sm">{{ post.category }}</span>
+            <h2 class="text-xl font-semibold mt-2">{{ post.title }}</h2>
+            <p class="text-gray-600 mt-2">{{ post.summary }}</p>
+            <a href="{% url 'blog_detail' post.slug %}" class="inline-block mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" aria-label="Read more about {{ post.title }}">Read more</a>
+          </div>
+        </div>
+      {% empty %}
+        <p class="col-span-3 text-center text-gray-600">Heç bir blog yazısı tapılmadı.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="mt-8 flex justify-center">
+      <nav class="inline-flex rounded-md shadow">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50" aria-label="Previous page">
+            Əvvəlki
+          </a>
+        {% endif %}
+
+        <span class="px-3 py-2 border border-gray-300 bg-white text-gray-700">
+          Səhifə {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50" aria-label="Next page">
+            Sonrakı
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var lazyloadImages = document.querySelectorAll("img.lazy-load");
+
+    function lazyload() {
+        var scrollTop = window.pageYOffset;
+        lazyloadImages.forEach(function(img) {
+            if (img.offsetTop < (window.innerHeight + scrollTop)) {
+                img.src = img.dataset.src;
+                img.classList.remove('lazy-load');
+            }
+        });
+
+        if (lazyloadImages.length == 0) {
+            document.removeEventListener("scroll", lazyload);
+            window.removeEventListener("resize", lazyload);
+            window.removeEventListener("orientationChange", lazyload);
+        }
+    }
+
+    // Run lazyload on page load
+    lazyload();
+
+    // Add event listeners
+    document.addEventListener("scroll", lazyload);
+    window.addEventListener("resize", lazyload);
+    window.addEventListener("orientationChange", lazyload);
+});
+</script>
+{% endblock %}

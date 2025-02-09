@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - Project Detail{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/project_detail.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<div class="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl font-bold text-center text-gray-900 mb-8">{{ project.title }}</h1>
+
+        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+            {% if project.image %}
+                <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-64 object-cover">
+            {% else %}
+                <div class="w-full h-64 flex items-center justify-center bg-gray-300">
+                    <span class="text-gray-500">No Image Available</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-8 bg-white rounded-lg p-6 shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Description</h2>
+            <p class="text-gray-700">{{ project.description }}</p>
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="{% url 'project_list' %}" class="text-indigo-600 hover:text-indigo-800">
+                &larr; Back to All Projects
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

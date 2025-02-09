@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style_detail.css' %}">
+<div id="blog-detail" class="bg-white text-black">
+  <div class="container mx-auto px-4 py-8">
+    <article>
+      <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-64 object-cover rounded-lg mb-8">
+      <h1 class="text-4xl font-bold mb-4">{{ post.title }}</h1>
+      <div class="flex justify-between text-gray-600 mb-8">
+        <span>{{ post.category }}</span>
+        <span>{{ post.created_at|date:"F j, Y" }}</span>
+      </div>
+      <div class="prose max-w-none mb-8">
+        {{ post.content|safe }}
+      </div>
+
+      <!-- Like button and like count -->
+      <div class="flex items-center space-x-4 mb-8">
+        <button id="likeButton" class="flex items-center space-x-2">
+          <span>Like 👍</span>
+          <span id="likeCount">{{ post.total_likes }}</span>
+        </button>
+        <span class="text-gray-600">{{ post.comments.count }} Comments</span>
+      </div>
+
+      <!-- Comments section -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">Comments</h2>
+        <div id="commentList">
+          {% for comment in post.comments.all %}
+          <div class="bg-gray-100 p-4 rounded-lg mb-4">
+            <p class="font-semibold">{{ comment.author.username }}</p>
+            <p>{{ comment.content }}</p>
+            <p class="text-sm text-gray-600">{{ comment.created_at|date:"F j, Y H:i" }}</p>
+          </div>
+          {% empty %}
+          <p>No comments yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Comment form -->
+      <form id="commentForm">
+        {% csrf_token %}
+        <textarea name="content" rows="4" placeholder="Write your comment..." required></textarea>
+        <button type="submit">Add Comment</button>
+      </form>
+    </article>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const likeButton = document.getElementById('likeButton');
+    const likeCount = document.getElementById('likeCount');
+    const commentForm = document.getElementById('commentForm');
+    const commentList = document.getElementById('commentList');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Like button functionality
+    likeButton.addEventListener('click', function () {
+        fetch('{% url "like_post" post.slug %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.likes_count !== undefined) {
+                likeCount.textContent = data.likes_count;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Comment form submission handling
+    commentForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const content = this.content.value;
+
+        fetch('{% url "add_comment" post.slug %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: content }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const newComment = document.createElement('div');
+                newComment.className = 'bg-gray-100 p-4 rounded-lg mb-4';
+                newComment.innerHTML = `
+                    <p class="font-semibold">${data.author}</p>
+                    <p>${data.content}</p>
+                    <p class="text-sm text-gray-600">${data.created_at}</p>
+                `;
+                commentList.prepend(newComment);
+                commentForm.reset();
+            } else {
+                alert(data.error || "An error occurred while posting your comment.");
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+</script>
+{% endblock %}
