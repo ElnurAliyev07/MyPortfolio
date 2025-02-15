@@ -1,117 +1,362 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}{{ post.title }}{% endblock %}
-
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %}{{ post.title }}{%endblock %} 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/style_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_detail.css' %}" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div id="blog-detail" class="bg-white text-black">
   <div class="container mx-auto px-4 py-8">
     <article>
-      <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-64 object-cover rounded-lg mb-8">
+      <img
+        src="{{ post.image.url }}"
+        alt="{{ post.title }}"
+        class="w-full h-64 object-cover rounded-lg mb-8"
+      />
       <h1 class="text-4xl font-bold mb-4">{{ post.title }}</h1>
       <div class="flex justify-between text-gray-600 mb-8">
         <span>{{ post.category }}</span>
         <span>{{ post.created_at|date:"F j, Y" }}</span>
       </div>
-      <div class="prose max-w-none mb-8">
-        {{ post.content|safe }}
-      </div>
+      <div class="prose max-w-none mb-8">{{ post.content|safe }}</div>
 
-      <!-- Like button and like count -->
+      <!-- Like and Profile section -->
       <div class="flex items-center space-x-4 mb-8">
-        <button id="likeButton" class="flex items-center space-x-2">
+        <button
+          id="likeButton"
+          class="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded"
+          data-post-id="{{ post.id }}"
+        >
           <span>Like 👍</span>
           <span id="likeCount">{{ post.total_likes }}</span>
         </button>
-        <span class="text-gray-600">{{ post.comments.count }} Comments</span>
+        <span class="text-gray-600"
+          >Comments (<span id="commentCount">{{ post.comments.count }}</span
+          >)</span
+        >
+
+        {% if request.user.is_authenticated %}
+        <div class="relative" x-data="{ open: false }">
+          <!-- Butona klik etdikdə profil səhifəsinə yönləndirmək -->
+          <a
+            style="text-decoration: none"
+            href="{% url 'profile' %}"
+            id="profileButton"
+            class="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            <span>{{ request.user.username }}</span>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </a>
+        </div>
+        {% else %}
+        <a
+          href="{% url 'login' %}"
+          class="bg-green-500 text-white px-4 py-2 rounded"
+        ></a>
+        {% endif %}
       </div>
 
       <!-- Comments section -->
       <div class="mb-8">
         <h2 class="text-2xl font-bold mb-4">Comments</h2>
         <div id="commentList">
-          {% for comment in post.comments.all %}
-          <div class="bg-gray-100 p-4 rounded-lg mb-4">
-            <p class="font-semibold">{{ comment.author.username }}</p>
-            <p>{{ comment.content }}</p>
-            <p class="text-sm text-gray-600">{{ comment.created_at|date:"F j, Y H:i" }}</p>
+          {% for comment in comments %}
+          <div
+            class="bg-gray-100 p-4 rounded-lg mb-4 flex justify-between items-center"
+            id="comment-{{ comment.id }}"
+          >
+            <div>
+              <p class="font-semibold">{{ comment.author.username }}</p>
+              <p id="comment-content-{{ comment.id }}">{{ comment.content }}</p>
+              <p
+                class="text-sm text-gray-600"
+                data-original-time="{{ comment.created_at|date:'c' }}"
+              >
+                {{ comment.created_at|date:"F j, Y H:i" }}
+              </p>
+            </div>
+            {% if request.user == comment.author %}
+            <div class="flex space-x-2">
+              <button
+                class="edit-comment text-blue-500"
+                data-comment-id="{{ comment.id }}"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+              <button
+                class="delete-comment text-red-500"
+                data-comment-id="{{ comment.id }}"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+            {% endif %}
           </div>
           {% empty %}
-          <p>No comments yet.</p>
+          <p id="noCommentsMessage">No comments yet.</p>
           {% endfor %}
         </div>
       </div>
 
       <!-- Comment form -->
-      <form id="commentForm">
+      {% if request.user.is_authenticated %}
+      <form
+        id="commentForm"
+        method="POST"
+        action="{% url 'add_comment' post.slug %}"
+      >
         {% csrf_token %}
-        <textarea name="content" rows="4" placeholder="Write your comment..." required></textarea>
-        <button type="submit">Add Comment</button>
+        <textarea
+          name="content"
+          rows="4"
+          placeholder="Write your comment..."
+          required
+          class="w-full p-2 border rounded"
+        ></textarea>
+        <button
+          type="submit"
+          class="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Add Comment
+        </button>
       </form>
+      {% else %}
+      <p class="auth-message">
+        Şərh və Like etmək üçün
+        <a href="{% url 'login' %}" class="text-blue-500 underline"
+          >daxil olun</a
+        >.
+      </p>
+      {% endif %}
     </article>
   </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
+{% endblock %} {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const likeButton = document.getElementById('likeButton');
-    const likeCount = document.getElementById('likeCount');
-    const commentForm = document.getElementById('commentForm');
-    const commentList = document.getElementById('commentList');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  document.addEventListener("DOMContentLoaded", function () {
+    const likeButton = document.getElementById("likeButton");
+    const likeCount = document.getElementById("likeCount");
+    const commentForm = document.getElementById("commentForm");
+    const commentList = document.getElementById("commentList");
+    const csrfToken = document.querySelector(
+      "[name=csrfmiddlewaretoken]"
+    ).value;
+    const commentCount = document.getElementById("commentCount");
 
-    // Like button functionality
-    likeButton.addEventListener('click', function () {
-        fetch('{% url "like_post" post.slug %}', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json',
-            },
+    // Vaxtı formatlamaq üçün funksiya
+    function formatDate(dateString) {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      };
+      return new Date(dateString).toLocaleDateString("en-US", options);
+    }
+
+    // Bütün vaxtları formatlamaq üçün funksiya
+    function formatAllDates() {
+      document
+        .querySelectorAll(".text-sm.text-gray-600")
+        .forEach(function (timeElement) {
+          const originalTime = timeElement.getAttribute("data-original-time");
+          if (originalTime) {
+            timeElement.textContent = formatDate(originalTime);
+          }
+        });
+    }
+
+    // Səhifə yükləndikdə vaxtları formatla
+    formatAllDates();
+
+    // Like düyməsi funksionallığı
+    likeButton.addEventListener("click", function () {
+      fetch('{% url "like_post" post.slug %}', {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.likes_count !== undefined) {
+            likeCount.textContent = data.likes_count;
+          }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.likes_count !== undefined) {
-                likeCount.textContent = data.likes_count;
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        .catch((error) => console.error("Error:", error));
     });
 
-    // Comment form submission handling
-    commentForm.addEventListener('submit', function (e) {
+    // "Şərh yoxdur" mesajını yeniləmək üçün funksiya
+    function updateNoCommentsMessage() {
+      const noCommentsMessage = document.getElementById("noCommentsMessage");
+      const comments = commentList.querySelectorAll(".bg-gray-100");
+
+      if (comments.length === 0) {
+        if (!noCommentsMessage) {
+          const newMessage = document.createElement("p");
+          newMessage.id = "noCommentsMessage";
+          newMessage.textContent = "No comments yet.";
+          commentList.appendChild(newMessage);
+        }
+      } else {
+        if (noCommentsMessage) {
+          noCommentsMessage.remove();
+        }
+      }
+    }
+
+    // Şərh formu təqdim edilməsini idarə etmək
+    if (commentForm) {
+      commentForm.addEventListener("submit", function (e) {
         e.preventDefault();
         const content = this.content.value;
 
         fetch('{% url "add_comment" post.slug %}', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ content: content }),
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          body: JSON.stringify({ content: content }),
         })
-        .then(response => response.json())
-        .then(data => {
+          .then((response) => response.json())
+          .then((data) => {
             if (data.success) {
-                const newComment = document.createElement('div');
-                newComment.className = 'bg-gray-100 p-4 rounded-lg mb-4';
-                newComment.innerHTML = `
-                    <p class="font-semibold">${data.author}</p>
-                    <p>${data.content}</p>
-                    <p class="text-sm text-gray-600">${data.created_at}</p>
-                `;
-                commentList.prepend(newComment);
-                commentForm.reset();
+              const newComment = document.createElement("div");
+              newComment.className =
+                "bg-gray-100 p-4 rounded-lg mb-4 flex justify-between items-center";
+              newComment.id = `comment-${data.comment_id}`;
+
+              const formattedTime = formatDate(data.created_at);
+
+              newComment.innerHTML = `
+                            <div>
+                                <p class="font-semibold">${data.author}</p>
+                                <p id="comment-content-${data.comment_id}">${data.content}</p>
+                                <p class="text-sm text-gray-600" data-original-time="${data.created_at}">${formattedTime}</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="edit-comment text-blue-500" data-comment-id="${data.comment_id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="delete-comment text-red-500" data-comment-id="${data.comment_id}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        `;
+              commentList.insertBefore(newComment, commentList.firstChild);
+              commentForm.reset();
+
+              attachEditDeleteListeners(newComment);
+              commentCount.textContent = parseInt(commentCount.textContent) + 1;
+              updateNoCommentsMessage();
             } else {
-                alert(data.error || "An error occurred while posting your comment.");
+              alert(data.error || "Şərhiniz əlavə edilərkən xəta baş verdi.");
             }
-        })
-        .catch(error => console.error('Error:', error));
-    });
-});
+          })
+          .catch((error) => console.error("Error:", error));
+      });
+    }
+
+    // Redaktə və Silmə düymələrini idarə etmək üçün funksiya
+    function attachEditDeleteListeners(commentElement = null) {
+      const container = commentElement || document;
+
+      // Şərhi Redaktə Et
+      container.querySelectorAll(".edit-comment").forEach((button) => {
+        button.addEventListener("click", function () {
+          const commentId = this.getAttribute("data-comment-id");
+          const commentContentElement = document.getElementById(
+            `comment-content-${commentId}`
+          );
+          const currentContent = commentContentElement.innerText;
+
+          // Məzmunu redaktə edilə bilən textarea ilə əvəz et
+          commentContentElement.innerHTML = `<textarea id="edit-comment-${commentId}" class="w-full p-2 border rounded">${currentContent}</textarea>
+                                                        <button class="bg-green-500 text-white px-4 py-2 rounded mt-2 save-edit" data-comment-id="${commentId}">Yadda saxla</button>`;
+
+          // Yadda saxla düyməsinin funksionallığı
+          const saveButton = commentContentElement.querySelector(".save-edit");
+          saveButton.addEventListener("click", function () {
+            const newContent = document.getElementById(
+              `edit-comment-${commentId}`
+            ).value;
+            if (newContent.trim()) {
+              fetch(`/edit_comment/${commentId}/`, {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": csrfToken,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ content: newContent }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success) {
+                    commentContentElement.innerHTML = data.new_content;
+                  } else {
+                    alert(data.error);
+                  }
+                })
+                .catch((error) => console.error("Error:", error));
+            }
+          });
+        });
+      });
+
+      // Şərhi Sil
+      container.querySelectorAll(".delete-comment").forEach((button) => {
+        button.addEventListener("click", function () {
+          const commentId = this.getAttribute("data-comment-id");
+          const commentElement = document.getElementById(
+            `comment-${commentId}`
+          );
+
+          fetch(`/delete_comment/${commentId}/`, {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": csrfToken,
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                commentElement.remove(); // Şərhi UI-dan dərhal sil
+                // Şərh sayını azalt
+                commentCount.textContent =
+                  parseInt(commentCount.textContent) - 1;
+                // "Şərh yoxdur" mesajını yenilə
+                updateNoCommentsMessage();
+              } else {
+                alert(data.error);
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+      });
+    }
+
+    // Mövcud şərhlər üçün event listener-ləri inisializasiya et
+    attachEditDeleteListeners();
+
+    // "Şərh yoxdur" mesajını ilkin yeniləmə
+    updateNoCommentsMessage();
+  });
 </script>
 {% endblock %}

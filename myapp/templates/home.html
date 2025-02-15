@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=na"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>My Personal Portfolio Website</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
@@ -28,7 +28,9 @@
     <div id="home">
       <div class="container">
         <nav>
-          <img src="{% static 'img/logo.png' %}" alt="" class="logo" />
+          <a style="cursor: pointer" href="{% url 'home' %}"
+            ><img src="{% static 'img/logo.png' %}" alt="" class="logo"
+          /></a>
           <ul id="sidemenu">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
@@ -57,79 +59,78 @@
         <div class="row">
           <div class="about-col-1">
             <h1 class="sub-title">About Me</h1>
-            <img src="{% static 'img/user.jpeg' %}" alt="Profile Picture" />
+            <img src="{% static 'img/user.jpeg' %}" alt="Profil Şəkli" />
           </div>
           <div class="about-col-2">
             <div class="p">
               <p>
-                Hi! I'm Elnur Aliyev, a passionate software engineering student
-                with a focus on Python, Django, AI development, and
-                cybersecurity. As a 4th-year student at the State Custom
-                Committee Academy of the Republic of Azerbaijan, I am dedicated
-                to honing my skills in developing innovative web applications
-                and working on AI and machine learning solutions. I’m constantly
-                seeking new challenges to grow and make a meaningful impact in
-                the tech world.
+                Salam! Mən Elnur Əliyev, proqramlaşdırmaya və süni intellektə
+                böyük marağı olan bir developerəm. Veb tətbiqlər, məlumatların
+                analizi və AI modelləri üzərində işləməyi sevirəm. Python və
+                Django ilə yanaşı, müxtəlif proqramlaşdırma dillərində layihələr
+                həyata keçirmişəm. Hər zaman yeniliklər öyrənməyə və real dünya
+                problemlərinə texnoloji həllər tapmağa can atıram.
               </p>
             </div>
             <div class="tab-titles">
               <div class="tab-links active-link" onclick="opentab('skills')">
-                Skills
+                Bacarıqlar
               </div>
               <div class="tab-links" onclick="opentab('experience')">
-                Experience
+                Təcrübə
               </div>
-              <div class="tab-links" onclick="opentab('education')">
-                Education
-              </div>
+              <div class="tab-links" onclick="opentab('education')">Təhsil</div>
             </div>
             <div class="tab-contents active-tab" id="skills">
               <ul>
                 <li>
-                  <span>Python/Django</span><br />Building dynamic web
-                  applications and APIs.
+                  <span>Python / Django</span><br />Veb tətbiqlər və REST
+                  API-lər hazırlamaq.
                 </li>
                 <li>
-                  <span>Data Science</span><br />Analyzing and visualizing data
-                  to uncover insights.
+                  <span>Full-Stack Development</span><br />Frontend və backend
+                  həlləri ilə işləmək.
                 </li>
                 <li>
-                  <span>AI Development</span><br />Creating and training models
-                  for machine learning and AI solutions.
+                  <span>Data Science & Analitika</span><br />Verilənlərin
+                  təmizlənməsi, təhlili və vizuallaşdırılması.
                 </li>
                 <li>
-                  <span>Cybersecurity</span><br />Securing applications and
-                  systems from potential threats.
+                  <span>Süni İntellekt & Maşın Öyrənməsi</span><br />Başlanğıc
+                  səviyyədə AI modelləri qurmaq və optimallaşdırmaq.
+                </li>
+                <li>
+                  <span>Fərqli Proqramlaşdırma Dilləri</span><br />Python,
+                  JavaScript, C#, SQL və digərləri ilə layihələr hazırlamışam.
                 </li>
               </ul>
             </div>
             <div class="tab-contents" id="experience">
               <ul>
                 <li>
-                  <span>Software Engineer Intern</span><br />Developed web
-                  applications using Django and Python.
+                  <span>Data Science Təcrübəsi</span><br />Verilənlərin analizi,
+                  təmizlənməsi və vizuallaşdırılması üzrə işlər aparmışam.
                 </li>
                 <li>
-                  <span>Data Analyst Intern</span><br />Worked on data cleaning,
-                  analysis, and visualization tasks.
+                  <span>Veb Tətbiqlərin Hazırlanması</span><br />Fərdi və
+                  komanda layihələrində backend və frontend hissələr üzərində
+                  işləmişəm.
                 </li>
                 <li>
-                  <span>AI Developer</span><br />Created machine learning models
-                  for various applications.
+                  <span>AI Modellərinin İnkişafı</span><br />Maşın öyrənməsi və
+                  süni intellekt üzrə əsas konseptləri tətbiq etmişəm.
                 </li>
               </ul>
             </div>
             <div class="tab-contents" id="education">
               <ul>
                 <li>
-                  <span>Bachelor's in Information Security</span><br />State
-                  Custom Committee Academy of the Republic of Azerbaijan
-                  (Expected 2025).
+                  <span>Bakalavr: İnformasiya Təhlükəsizliyi</span><br />Dövlət
+                  Gömrük Komitəsinin Akademiyası (Gözlənilən: 2025).
                 </li>
                 <li>
-                  <span>Online Courses</span><br />Completed courses in Python,
-                  Django, Data Science, and AI on platforms like Coursera and
-                  Udemy.
+                  <span>Onlayn Kurslar</span><br />Python, Django və Data
+                  Science üzrə edX, Coursera və Udemy kursları tamamlamışam.
                 </li>
               </ul>
             </div>
@@ -138,7 +139,6 @@
       </div>
     </div>
 
-   
     <div id="blog">
       <div class="container">
         <h1 class="sub-title">My Blogs</h1>
@@ -152,7 +152,7 @@
               <span>{{ post.category }}</span>
               <h3 class="blog-title">{{ post.title }}</h3>
               <p>{{ post.summary }}</p>
-              <a href="{% url 'blog_detail' post.slug %}">Read More</a>
+              <a href="{% url 'blog_detail' post.slug %}">Read More..</a>
             </div>
           </div>
           {% endfor %}
@@ -171,7 +171,11 @@
             <div class="layer">
               <h3>{{ project.title }}</h3>
               <p>{{ project.description|truncatewords:20 }}</p>
-              <a href="{% url 'project_detail' slug=project.slug %}">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="{% url 'project_detail' slug=project.slug %}"
+              >
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -190,15 +194,26 @@
             <p><i class="fas fa-paper-plane"></i> elnuraliyev.mail@gmail.com</p>
             <p><i class="fas fa-phone-square-alt"></i> +994505357771</p>
             <div class="social-icons">
-              <a href="https://www.facebook.com/profile.php?id=100052307970129"><i class="fab fa-facebook"></i></a>
-              <a href="https://www.instagram.com/_al1yev07/"><i class="fab fa-instagram"></i></a>
-              <a href="https://www.linkedin.com/in/elnur-aliyev-a17160265/"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.facebook.com/profile.php?id=100052307970129"
+                ><i class="fab fa-facebook"></i
+              ></a>
+              <a href="https://www.instagram.com/_al1yev07/"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="https://www.linkedin.com/in/elnur-aliyev-a17160265/"
+                ><i class="fab fa-linkedin"></i
+              ></a>
             </div>
-            <a href="https://drive.google.com/uc?export=download&id=1s25tiK7kBgW0ic951p4wZfgHxSgvgns_" download class="btn btn2">Download CV</a>
+            <a
+              href="https://drive.google.com/uc?export=download&id=1s25tiK7kBgW0ic951p4wZfgHxSgvgns_"
+              download
+              class="btn btn2"
+              >Download CV</a
+            >
           </div>
           <div class="contact-right">
             <form method="post">
-              {% csrf_token %} {{ form.name }} {{ form.email }} {{ form.message}}
+              {% csrf_token %} {{ form.name }} {{ form.email }} {{form.message}}
               <button type="submit" class="btn btn2">Submit</button>
             </form>
           </div>

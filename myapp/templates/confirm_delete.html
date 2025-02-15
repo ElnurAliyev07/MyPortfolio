@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hesabınızı Silmək İstəyirsiniz?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom Styles */
+      .button {
+        display: inline-block;
+        width: 100%;
+        padding: 12px 0;
+        text-align: center;
+        background-color: #4caf50;
+        color: white;
+        border-radius: 5px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #45a049;
+        transform: translateY(-3px);
+      }
+
+      .button:active {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div class="flex justify-center mt-16 px-4">
+      <div class="bg-white p-8 rounded-lg shadow-lg w-full sm:w-96">
+        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">
+          Hesabınızı Silmək İstəyirsiniz?
+        </h2>
+
+        <p class="text-gray-600 mb-6">
+          Hesabınızı sildikdə, bütün məlumatlarınız itəcəkdir. Bu əməliyyat geri
+          alına bilməz.
+        </p>
+
+        <form action="{% url 'delete_account' %}" method="POST">
+          {% csrf_token %}
+          <div class="flex justify-between gap-4">
+            <button
+              type="submit"
+              class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 text-center font-semibold"
+            >
+              Bəli, hesabımı sil
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-6">
+          <!-- Geri Qayıt Button -->
+          <a href="{% url 'profile' %}" class="button">Geri Qayıt</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

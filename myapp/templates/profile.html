@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil</title>
+    <link rel="stylesheet" href="{% static 'css/logreg.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .profile-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+      .profile-card:hover {
+        transform: translateY(-5px);
+      }
+      .profile-card h2 {
+        color: #333;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+      .profile-card p {
+        color: #555;
+        font-size: 16px;
+      }
+      .profile-btn {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+    </style>
+  </head>
+  <body style="background: rgb(236, 236, 236)" class="bg-gray-100 font-sans">
+    <nav class="navbar">
+      <img src="{% static 'img/logo2.png' %}" alt="Logo" class="logo" />
+      <ul id="sidemenu">
+        <li>
+          <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-500"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'home' %}#about"
+            class="text-gray-700 hover:text-blue-500"
+            >About</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'blog_list' %}"
+            class="text-gray-700 hover:text-blue-500"
+            >Blogs</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'project_list' %}"
+            class="text-gray-700 hover:text-blue-500"
+            >Projects</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'home' %}#contact"
+            class="text-gray-700 hover:text-blue-500"
+            >Contact</a
+          >
+        </li>
+      </ul>
+      <div class="menu-icons">
+        <i class="fas fa-bars" id="menu-open"></i>
+        <i class="fas fa-times" id="menu-close"></i>
+      </div>
+    </nav>
+
+    <div class="flex justify-center items-center min-h-screen">
+      <div class="profile-card">
+        <h2>Profil</h2>
+        <p><strong>İstifadəçi adı:</strong> {{ user.username }}</p>
+        <p><strong>E-poçt:</strong> {{ user.email }}</p>
+        <p>
+          <strong>Qeydiyyat tarixi:</strong> {{ user.date_joined|date:"F j, Y"}}
+        </p>
+
+        <div class="mt-6 space-y-3">
+          <a
+            href="{% url 'blog_list' %}"
+            class="block bg-gray-500 text-white profile-btn hover:bg-gray-600"
+            >Qayıt</a
+          >
+          <form action="{% url 'delete_account' %}" method="GET">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="bg-red-600 text-white profile-btn hover:bg-red-700"
+            >
+              Hesabı Sil
+            </button>
+          </form>
+          <a
+            href="{% url 'password_change' %}"
+            class="block bg-blue-500 text-white profile-btn hover:bg-blue-600"
+            >Şifrəni dəyiş</a
+          >
+          <a
+            href="{% url 'logout' %}"
+            class="block bg-red-500 text-white profile-btn hover:bg-red-600"
+            >Hesabdan Çıxış</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <footer
+      style="margin-top: -2.5rem"
+      class="text-center py-2 bg-white shadow-md mt-10"
+    >
+      <p style="font-weight: 600">
+        &copy; 2025 Elnur Aliyev. All rights reserved.
+      </p>
+    </footer>
+
+    <script>
+      const sidemenu = document.getElementById("sidemenu");
+      const menuOpen = document.getElementById("menu-open");
+      const menuClose = document.getElementById("menu-close");
+
+      function toggleMenu() {
+        sidemenu.classList.toggle("active");
+        menuOpen.style.display = sidemenu.classList.contains("active")
+          ? "none"
+          : "block";
+        menuClose.style.display = sidemenu.classList.contains("active")
+          ? "block"
+          : "none";
+      }
+
+      menuOpen.addEventListener("click", toggleMenu);
+      menuClose.addEventListener("click", toggleMenu);
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const isClickInside =
+          sidemenu.contains(event.target) ||
+          menuOpen.contains(event.target) ||
+          menuClose.contains(event.target);
+
+        if (!isClickInside && sidemenu.classList.contains("active")) {
+          toggleMenu();
+        }
+      });
+
+      // Reset menu state on window resize
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) {
+          sidemenu.classList.remove("active");
+          menuOpen.style.display = "none";
+          menuClose.style.display = "none";
+        } else {
+          menuOpen.style.display = sidemenu.classList.contains("active")
+            ? "none"
+            : "block";
+          menuClose.style.display = sidemenu.classList.contains("active")
+            ? "block"
+            : "none";
+        }
+      });
+    </script>
+  </body>
+</html>

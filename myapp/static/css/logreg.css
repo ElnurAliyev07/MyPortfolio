@@ -1,0 +1,322 @@
+/* Ümumi stillər */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to right, #4CAF50, #2196F3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    /* This will space out the logo and the nav items */
+    align-items: center;
+    gap: 0.5rem;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+    /* Optional: To add some space on the sides */
+}
+
+.navbar a,
+.navbar span {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 1px solid #eaeaea;
+    background-color: #fff;
+    color: #333;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+    transform: translateY(-2px);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    margin-right: auto;
+    /* Pushes the logo to the left */
+}
+
+
+#sidemenu {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px;
+}
+
+#sidemenu li {
+    margin-left: 40px;
+}
+
+/*
+#sidemenu a {
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+} */
+
+.menu-icons {
+    display: none;
+}
+
+/* Login forması */
+.login-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px 20px;
+    /* Üst paddingi azaldıq */
+}
+
+.login-form {
+    background-color: white;
+    padding: 30px;
+    /* İç paddingi azaldıq */
+    border-radius: 12px;
+    /* Küncləri daha az yuvarladıq */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    /* Max width-i kiçildik */
+    height: auto;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    /* Başlıq altındakı boşluğu kiçildik */
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 8px;
+    /* Button paddingi kiçildik */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    /* Button font ölçüsünü kiçildik */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+.signup-link {
+    text-decoration: none;
+    border-radius: 8px;
+    display: inline-block;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+
+.no-underline {
+    font-weight: 600;
+    color: #1976D2;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.no-underline:hover {
+    opacity: 0.7;
+}
+
+.error-message {
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    color: #b71c1c;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+/* Message Container */
+.message-container {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+/* Password Container */
+.password-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.password-container input {
+    flex: 1;
+    padding-right: 40px;
+    /* Adjust to make room for the icon */
+}
+
+.password-container .fa-eye {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    margin-top: auto;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Responsivlik */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 10px;
+    }
+
+    #sidemenu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 54px;
+        left: 0;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        /* Start hidden */
+        visibility: hidden;
+        /* Ensure it's not clickable when hidden */
+        transition: opacity 0.5s ease-in-out, visibility 0s 0.5s;
+        /* Add transition for smooth visibility change */
+    }
+
+    #sidemenu.active {
+        display: flex;
+        opacity: 1;
+        /* Make visible */
+        visibility: visible;
+        /* Ensure it is interactable */
+        animation: fadeIn 0.5s ease-in;
+        /* Apply the animation */
+    }
+
+    #sidemenu li {
+        margin: 0;
+        text-align: center;
+    }
+
+    #sidemenu a {
+        display: block;
+        padding: 10px;
+    }
+
+    .menu-icons {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    #menu-close {
+        display: none;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    to {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.a a {
+    font-weight: bold;
+    color: #1D4ED8;
+    /* Blue color for the link */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.a a:hover {
+    color: #3B82F6;
+    /* Lighter blue on hover */
+    text-decoration: none;
+}

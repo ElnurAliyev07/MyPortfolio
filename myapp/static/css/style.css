@@ -39,9 +39,11 @@ body.light-mode {
     color: black;
     transition: 0.5s;
 }
+
 .light-mode .btn:hover {
     color: white;
 }
+
 .light-mode .btn2 {
     color: white;
 }
@@ -57,9 +59,12 @@ body.light-mode {
     background-color: white;
     color: black;
 }
-.light-mode form input, .light-mode textarea {
+
+.light-mode form input,
+.light-mode textarea {
     background-color: #4e4b4b;
 }
+
 .light-mode .copyright {
     color: white;
 }
@@ -95,7 +100,7 @@ nav {
     align-items: center;
     justify-content: space-between;
     color: white;
-    background-color: #0f0f0f;
+    background-color: black;
     /* Add background color for better visibility */
     transition: top 0.3s, background-color 0.3s, color 0.3s;
     z-index: 100;
@@ -158,10 +163,12 @@ nav ul li a:hover::after {
     font-size: 2vw;
     font-weight: 550;
 }
+
 .typing {
     color: #00bbff;
     font-weight: 550;
 }
+
 .header-text h1 span {
     color: #00bbff;
 }
@@ -217,9 +224,11 @@ nav ul li a:hover::after {
     padding-right: 30px;
     margin-top: 125px;
 }
-.about-col-2 .p{
+
+.about-col-2 .p {
     width: 100%;
 }
+
 .sub-title {
     padding-left: 3px;
     font-size: 60px;
@@ -271,7 +280,7 @@ nav ul li a:hover::after {
 
 
 #blog {
-    padding: 7px ;
+    padding: 7px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     text-align: left;
 }
@@ -542,20 +551,11 @@ nav .fa {
 
 @media only screen and (max-width: 768px) {
     #home {
-        background-image: url("../img/elnur1.jpeg");
+        background-image: url("../img/user2.jpeg");
     }
 
-    /* .header-text {
-        margin-top: 100%;
-        font-size: 22px;
-        text-align: left;
-    }
-    .header-text h1 {
-        font-size: 32px;
-    } */
     .header-text {
         font-size: 4vw;
-        /* Adjust font size for smaller screens */
     }
 
     .header-text p {
@@ -674,7 +674,8 @@ nav .fa {
     margin-top: 30px;
 }
 
-.pagination a, .pagination span {
+.pagination a,
+.pagination span {
     padding: 8px 16px;
     margin: 0 4px;
     border: 1px solid #ddd;
@@ -692,4 +693,5 @@ nav .fa {
     color: white;
     border: 1px solid #00bbff;
 }
+
 /* Blog Detail Styles */

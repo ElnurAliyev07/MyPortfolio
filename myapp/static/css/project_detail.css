@@ -146,6 +146,7 @@ body {
         height: 12rem;
     }
 }
+
 a {
     text-decoration: none;
     display: inline-block;
@@ -159,6 +160,7 @@ a {
 a:hover {
     transform: translateY(-3px);
 }
+
 /* Container */
 .container {
     max-width: 1200px;
@@ -174,7 +176,8 @@ nav {
     gap: 0.5rem;
 }
 
-nav a, nav span {
+nav a,
+nav span {
     display: inline-block;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;

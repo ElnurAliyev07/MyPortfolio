@@ -14,16 +14,19 @@ body {
 
 /* Container Styling */
 .container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 /* Article Styles */
 article img {
     display: block;
+    margin-top: 50px;
     width: 100%;
-    height: 400px; /* Fixed height for a consistent look */
-    object-fit: cover; /* Ensures the image fills the container */
+    height: 400px;
+    /* Fixed height for a consistent look */
+    object-fit: cover;
+    /* Ensures the image fills the container */
     border-radius: 0.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -163,7 +166,8 @@ article h1 {
 
 @media (max-width: 480px) {
     article img {
-        height: 300px; /* Adjust image height for smaller screens */
+        height: 300px;
+        /* Adjust image height for smaller screens */
     }
 
     #likeButton {
@@ -179,4 +183,131 @@ article h1 {
         font-size: 0.8rem;
         padding: 0.5rem 1rem;
     }
+}
+
+.auth-message {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-message a {
+    font-weight: bold;
+    color: #1D4ED8;
+    /* Blue color for the link */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-message a:hover {
+    color: #3B82F6;
+    /* Lighter blue on hover */
+    text-decoration: none;
+}
+
+.auth-message {
+    padding: 10px;
+    background-color: #f1f5f9;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Comment section styling */
+#commentList {
+    padding: 10px;
+}
+
+.bg-gray-100 {
+    background-color: #f7fafc;
+}
+
+.text-gray-600 {
+    color: #718096;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.rounded-lg {
+    border-radius: 8px;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.space-x-2 {
+    margin-right: 0.5rem;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+/* Edit and Delete buttons */
+.edit-comment,
+.delete-comment {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+/* Edit Button Hover */
+.edit-comment:hover {
+    color: #3182ce;
+    /* Blue */
+}
+
+/* Delete Button Hover */
+.delete-comment:hover {
+    color: #e53e3e;
+    /* Red */
+}
+
+/* Font Awesome Icon Styles */
+.fas {
+    font-size: 16px;
+}
+
+#profileButton {
+    display: flex;
+    border: 2px solid black;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #3b82f6;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#profileButton:hover {
+    background-color: #2563eb;
+    /* Hover zamanında fonun tündləşməsi */
+    transform: translateY(-2px);
+    /* Hover zamanında yuxarıya doğru kiçik bir hərəkət */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Hover zamanı kölgə əlavə edirik */
 }
